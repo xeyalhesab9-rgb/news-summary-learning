@@ -2,42 +2,200 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>News Summary</title>
-  <style>
-    body {
-      background: #101522;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      text-align: center;
-    }
-    .box {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 25px;
-      background: #202b40;
-      border-radius: 15px;
-    }
-    button {
-      background: #2585ed;
-      color: white;
-      padding: 14px 25px;
-      border: 0;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewsAI Premium</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080d19;color:#edf3ff;
+ font-family:Arial,sans-serif;min-height:100vh;
+}
+header{
+ padding:22px 7%;display:flex;align-items:center;
+ justify-content:space-between;border-bottom:1px solid #1c2940;
+}
+.logo{font-size:23px;font-weight:800;color:#fff}
+.logo span{color:#398cff}
+.status{font-size:12px;color:#54dda9}
+main{max-width:1000px;margin:45px auto;padding:0 20px}
+.hero{text-align:center;margin-bottom:35px}
+.hero h1{font-size:38px;margin:0 0 12px}
+.hero h1 span{color:#438fff}
+.hero p{color:#8999b5;line-height:1.6}
+.panel{
+ background:linear-gradient(145deg,#131e33,#0d1526);
+ border:1px solid #253653;border-radius:18px;
+ padding:25px;margin-bottom:22px;
+ box-shadow:0 15px 45px #0005;
+}
+.label{font-size:14px;font-weight:bold;margin-bottom:14px}
+textarea{
+ width:100%;height:190px;resize:vertical;
+ background:#091222;border:1px solid #263957;
+ border-radius:12px;padding:17px;color:white;
+ font-size:15px;line-height:1.7;outline:none;
+}
+textarea:focus{border-color:#438fff}
+.controls{
+ display:flex;flex-wrap:wrap;gap:12px;
+ align-items:center;margin-top:17px;
+}
+select{
+ background:#101e34;color:white;border:1px solid #304362;
+ padding:12px;border-radius:9px;
+}
+button{
+ border:0;border-radius:10px;padding:13px 20px;
+ cursor:pointer;font-weight:bold;font-size:14px;
+}
+.primary{
+ background:linear-gradient(110deg,#2675ed,#50a6ff);
+ color:white;flex:1;
+}
+.secondary{background:#1b2b45;color:#dceaff}
+button:hover{filter:brightness(1.15)}
+.result{display:none}
+.result-text{
+ background:#091222;border:1px solid #263957;
+ padding:20px;border-radius:12px;
+ color:#dce8ff;line-height:1.8;white-space:pre-wrap;
+}
+.stats{display:flex;gap:20px;color:#8498b8;font-size:12px;margin-top:15px}
+footer{text-align:center;color:#64748b;font-size:12px;padding:30px}
+@media(max-width:600px){
+ .hero h1{font-size:29px}
+ header{padding:18px}
+ .panel{padding:17px}
+ .controls button{width:100%}
+}
+</style>
 </head>
 <body>
-  <div class="box">
-    <h1>News Summary</h1>
-    <p>Offline News Summary layihəsinə xoş gəlmisiniz.</p>
-    <button onclick="document.getElementById('result').textContent='Layihə uğurla işləyir!'">
-      Başlat
-    </button>
-    <p id="result"></p>
+
+<header>
+ <div class="logo">News<span>AI</span></div>
+ <div class="status">● SYSTEM ONLINE</div>
+</header>
+
+<main>
+ <section class="hero">
+  <h1>Smart News <span>Summary</span></h1>
+  <p>Xəbərləri saniyələr ərzində qısa və anlaşılan xülasəyə çevir.</p>
+ </section>
+
+ <section class="panel">
+  <div class="label">01 / XƏBƏR MƏTNİ</div>
+  <textarea id="news" placeholder="Xəbər mətnini bura daxil et..."></textarea>
+
+  <div class="controls">
+   <select id="length">
+    <option value="short">Qısa xülasə</option>
+    <option value="medium" selected>Orta xülasə</option>
+    <option value="long">Uzun xülasə</option>
+   </select>
+   <button class="secondary" onclick="sample()">Nümunə mətn</button>
+   <button class="secondary" onclick="clearText()">Təmizlə</button>
+   <button class="primary" onclick="summarize()">✦ Xülasə yarat</button>
   </div>
+ </section>
+
+ <section class="panel result" id="result">
+  <div class="label">02 / HAZIR XÜLASƏ</div>
+  <div class="result-text" id="output"></div>
+  <div class="stats">
+   <span id="words">0 söz</span>
+   <span id="sentences">0 cümlə</span>
+  </div>
+  <div class="controls">
+   <button class="primary" onclick="copyResult()">Nəticəni kopyala</button>
+  </div>
+ </section>
+</main>
+
+<footer>NewsAI Premium · Offline Learning Edition</footer>
+
+<script>
+const stopWords = new Set([
+"və","bu","bir","üçün","ilə","olan","olaraq","ki","da","də",
+"the","a","an","and","or","of","to","in","is","are","was",
+"on","at","for","that","it","as","by","from","with","be",
+"bu","həmin","daha","çox","sonra","belə","hər","kimi"
+]);
+
+function sample(){
+ document.getElementById("news").value =
+ "Azərbaycanın texnologiya sahəsində yeni layihələr həyata keçirilir. " +
+ "Son illərdə rəqəmsal xidmətlərin inkişafı sürətlənib. " +
+ "Yeni texnologiyalar insanların gündəlik həyatını asanlaşdırır. " +
+ "Mütəxəssislər süni intellekt sahəsinin gələcəkdə daha da inkişaf edəcəyini bildirirlər. " +
+ "Yeni layihələrin əsas məqsədi rəqəmsal imkanları genişləndirməkdir. " +
+ "Bu istiqamətdə müxtəlif təlimlər və texnoloji proqramlar hazırlanır.";
+}
+
+function clearText(){
+ document.getElementById("news").value="";
+ document.getElementById("result").style.display="none";
+}
+
+function summarize(){
+ const text=document.getElementById("news").value.trim();
+ if(text.length<30){
+  alert("Zəhmət olmasa, daha uzun xəbər mətni daxil et.");
+  return;
+ }
+
+ const sentences=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];
+ const words=text.toLowerCase().match(/[a-zəöüğışç0-9]+/gi)||[];
+ const frequency={};
+
+ words.forEach(word=>{
+  if(word.length>2&&!stopWords.has(word)){
+   frequency[word]=(frequency[word]||0)+1;
+  }
+ });
+
+ const scored=sentences.map((sentence,index)=>{
+  const tokens=sentence.toLowerCase().match(/[a-zəöüğışç0-9]+/gi)||[];
+  let score=0;
+  tokens.forEach(word=>{
+   if(frequency[word]&&!stopWords.has(word)){
+    score+=frequency[word];
+   }
+  });
+  return {sentence:sentence.trim(),index,score:score/Math.sqrt(tokens.length||1)};
+ });
+
+ let count=1;
+ const mode=document.getElementById("length").value;
+ if(mode==="medium")count=Math.ceil(sentences.length*0.4);
+ if(mode==="long")count=Math.ceil(sentences.length*0.65);
+ count=Math.max(1,Math.min(count,sentences.length));
+
+ const selected=scored
+  .sort((a,b)=>b.score-a.score)
+  .slice(0,count)
+  .sort((a,b)=>a.index-b.index);
+
+ const summary=selected.map(item=>item.sentence).join(" ");
+ document.getElementById("output").textContent=summary;
+ document.getElementById("words").textContent=
+  (summary.match(/\S+/g)||[]).length+" söz";
+ document.getElementById("sentences").textContent=
+  selected.length+" cümlə";
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+}
+
+async function copyResult(){
+ const text=document.getElementById("output").textContent;
+ try{
+  await navigator.clipboard.writeText(text);
+  alert("Xülasə kopyalandı!");
+ }catch(e){
+  alert("Kopyalama mümkün olmadı. Nəticəni seçərək kopyala.");
+ }
+}
+</script>
 </body>
 </html>
