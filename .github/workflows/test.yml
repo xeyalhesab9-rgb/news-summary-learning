@@ -1,25 +1,19 @@
 
-name: Test Node.js project
+name: Node.js Testing
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
 
-      - name: Run project
-        run: node main.ts
-
-      - name: Check output
-        run: |
-          test -f output/entry.txt
-          cmp summary-1.txt output/entry.txt
+      - run: npm install
+      - run: npm test
