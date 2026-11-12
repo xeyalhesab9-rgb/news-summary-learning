@@ -1,24 +1,25 @@
+
 # Offline News Summary — Learning Demo
 
-This small project demonstrates how a Node.js program can copy a text summary into an output folder without using the internet.
+A simple Node.js 22 project for practicing offline text processing.
 
 ## Files
-- `main.ts` — program entry point (Node.js 22 can run this TypeScript-flavoured JavaScript file in supported configurations; use `node main.ts`).
-- `summary.txt` — sample text. It is explicitly fictional practice text, not real news.
+
+- `main.ts` — main program.
+- `summary-1.txt` — sample fictional text.
 
 ## Run
-From this folder, with Node.js 22 installed:
 
-```sh
+```bash
 node main.ts
 ```
 
-The program creates `output/entry.txt` and copies the contents of `summary.txt` there.
+The program creates `output/entry.txt` and copies the contents of `summary-1.txt` into it.
 
-To choose another output directory:
+## Requirements
 
-```sh
-OUTPUT_DIR=out node main.ts
-```
+- Node.js 22 or newer.
 
-This is an educational example, not a competition submission. Do not present the sample text as factual news or invent sources.
+## Note
+
+This is an educational project. The sample text is fictional and is not real-world news.
