@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News Summary</title>
+  <style>
+    body {
+      background: #101522;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      text-align: center;
+    }
+    .box {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 25px;
+      background: #202b40;
+      border-radius: 15px;
+    }
+    button {
+      background: #2585ed;
+      color: white;
+      padding: 14px 25px;
+      border: 0;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>News Summary</h1>
+    <p>Offline News Summary layihəsinə xoş gəlmisiniz.</p>
+    <button onclick="document.getElementById('result').textContent='Layihə uğurla işləyir!'">
+      Başlat
+    </button>
+    <p id="result"></p>
+  </div>
+</body>
+</html>
