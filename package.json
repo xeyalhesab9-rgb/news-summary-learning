@@ -1,0 +1,13 @@
+{
+  "name": "news-summary-learning",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline Node.js learning demo for handling a sample news summary",
+  "scripts": {
+    "start": "node main.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
